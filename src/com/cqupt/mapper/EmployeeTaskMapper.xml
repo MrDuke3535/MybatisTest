@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqupt.mapper.EmployeeTaskMapper">
+<resultMap type="EmployeeTask" id="employeeTaskMapper">
+<id property="id" column="id"/>
+<result property="empId" column="emp_id"/>
+<result property="taskName" column="task_id"/>
+<result property="note"  column="note"/>
+<association property="task" column="task_id" select="com.cqupt.mapper.TaskMapper.getTask"></association>
+</resultMap>
+
+
+<select id="getEmployeeTaskByEmpId" resultMap="employeeTaskMapper" parameterType="long">
+select id,emp_id,task_id,task_name,note from t_employee_task where emp_id = #{empId}
+</select>
+
+</mapper>

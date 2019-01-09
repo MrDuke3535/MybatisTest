@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+  
+<!-- 注意：每个标签必须按顺序写，不然蛋疼的DTD会提示错误：The content of element type "configuration" must match "(properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,plugins?,environments?,mappers?)". -->  
+<configuration>  
+    <!-- 属性配置 --> 
+     <!-- 相同属性:最高优先级的属性是那些作为方法参数的，然后是资源/url 属性，最后是 properties元素中指定的属性 -->   
+    <properties resource="jdbc.properties"> 
+    <!-- 
+        <property name="database.username" value="root"/>  
+        <property name="database.password" value="1234"/>  
+        <property name="database.url" value="jdbc:mysql://127.0.0.1:3306/mybatis?serverTimezone=UTC&amp;charcaterEncoding=utf8&amp;useUincode=true&amp;useSSL=false"></property>
+        <property name="database.driver" value="com.mysql.cj.jdbc.Driver"></property>
+         --> 
+    </properties>  
+    <!-- 设置缓存和延迟加载等等重要的运行时的行为方式 -->  
+    <!-- 设置超时时间，它决定驱动等待一个数据库响应的秒数 -->  
+    <settings>  
+        <setting name="autoMappingBehavior" value="PARTIAL"/> <!-- 对没有嵌套结果集进行自动映射 -->
+          <setting name="lazyLoadingEnabled" value="true"/>
+          <setting name="aggressiveLazyLoading" value="false"/>
+    	<!-- <setting name="mapUnderscoreToCamelCase" value="true"/>  --><!-- 使用驼峰命名法自动映射 -->
+    </settings>  
+    <!-- 别名 -->  
+    <typeAliases>  
+        <typeAlias alias="roleParams" type="com.cqupt.param.RoleParams"/>  
+        <package name="com.cqupt.pojo"></package>
+    </typeAliases>  
+    
+    <typeHandlers>
+    	<typeHandler jdbcType="VARCHAR" javaType="String" handler="com.cqupt.typehandler.MyTypeHandler"></typeHandler>
+    	<package name="com.cqupt.typehandler"></package>
+    </typeHandlers>
+    
+    <!-- 对象工厂 -->
+    <objectFactory type="com.cqupt.objectfactory.MyObjectFactory">
+    	<property name="propl" value="value1"/>
+    </objectFactory>
+    
+    <environments default="development">  
+        <!-- environment 元素体中包含对事务管理和连接池的环境配置 -->  
+        <environment id="development"> 
+        <!--   
+            <transactionManager type="JDBC" /> 
+        --> 
+        <transactionManager type="com.cqupt.transaction.MyTransactionFactory"></transactionManager>
+             <!-- 配置事务管理器 包含JDBC和MANAGED -->
+            <!-- type分三种：  
+                    UNPOOLED是每次被请求时简单打开和关闭连接   
+                    UNPOOLED的数据源仅仅用来配置以下 4 种属性driver，url，username，password  
+                    POOLED ：JDBC连接对象的数据源连接池的实现，不直接支持第三方数据库连接池  
+            -->  
+            <dataSource type="POOLED">  <!-- 连接池方式 -->
+                <property name="driver" value="${database.driver}" />  
+                <property name="url" value="${database.url}" />  
+                <property name="username" value="${database.username}" />  
+                <property name="password" value="${database.password}" />  
+            </dataSource>  
+        </environment>  
+    </environments>  
+    <databaseIdProvider type="com.cqupt.databaseidprovider.MyDatabaseIdProvider">
+    	<property name="msg" value="自定义databaseIdrProvider"/>
+    </databaseIdProvider>
+      
+    <!-- ORM映射文件 -->  
+    <mappers>  
+    <!-- 
+        <mapper resource="com/cqupt/mapper/RoleMapper.xml" />
+        <mapper resource="com/cqupt/mapper/UserMapper.xml" />
+     -->
+     <package name="com.cqupt.mapper"/>
+    </mappers>  
+      
+</configuration>
