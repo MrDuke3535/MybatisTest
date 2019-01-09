@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.cqupt.mapper.WorkCardMapper">
+
+
+<select id="getWorkCardByEmpId" parameterType="long" resultType="workCard">
+select id,emp_id as empId,real_name as realName,dapartment,mobile,POSITION as position,note from t_work_card where emp_id = #{empId}
+</select>
+
+</mapper>
